@@ -288,7 +288,18 @@ class PixivApi {
     return this.requestUrl(`/v1/user/illusts?${queryString}`);
   }
 
-  userBookmarksIllust(id, options) {
+  userBookmarksIllust(id, options, url) {
+    if (url) {
+      return this.requestUrl(url).then(async (res) => {
+        if (res.next_url) {
+          let next = await this.userBookmarksIllust(null, null, res.next_url)
+          return res.illusts.concat(next)
+        } else {
+          return res.illusts
+        }
+      })
+    }
+
     if (!id) {
       return Promise.reject(new Error('user_id required'));
     }
@@ -303,7 +314,12 @@ class PixivApi {
         options
       )
     );
-    return this.requestUrl(`/v1/user/bookmarks/illust?${queryString}`);
+    return this.requestUrl(`/v1/user/bookmarks/illust?${queryString}`).then(async (res) => {
+      if (res.next_url) {
+        let next = await this.userBookmarksIllust(null, null, res.next_url)
+        return res.illusts.concat(next)
+      }
+    });
   }
 
   userBookmarkIllustTags(options) {
