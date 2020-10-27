@@ -12,7 +12,6 @@ const CLIENT_ID = 'KzEZED7aC0vird8jWyHM38mXjNTY';
 const CLIENT_SECRET = 'W9JZoJe00qPvJsiyCGT3CCtC6ZUtdpKpzMbNlUGP';
 const HASH_SECRET =
   '28c1fdd170a5204386cb1313c7077b34f83e4aaf4aa829ce78c231e05b0bae2c';
-const filter = 'for_ios';
 
 function callApi(url, options) {
   const finalUrl = /^https?:\/\//i.test(url) ? url : BASE_URL + url;
@@ -28,14 +27,17 @@ function callApi(url, options) {
 }
 
 class PixivApi {
-  constructor() {
+  constructor(options) {
     this.headers = {
-      'App-OS': 'ios',
+      'App-OS': 'android',
       'Accept-Language': 'en-us',
-      'App-OS-Version': '12.0.1',
-      'App-Version': '7.6.2',
-      'User-Agent': 'PixivIOSApp/7.6.2 (iOS 12.0.1; iPhone8,2)',
+      'App-OS-Version': '9.0',
+      'App-Version': '5.0.155',
+      'User-Agent': 'PixivAndroidApp/5.0.155 (Android 9.0; Pixel 3)',
     };
+    if (options && options.headers) {
+      this.headers = Object.assign({}, this.headers, options.headers);
+    }
   }
 
   getDefaultHeaders() {
@@ -217,7 +219,6 @@ class PixivApi {
           word,
           search_target: 'partial_match_for_tags',
           sort: 'date_desc',
-          filter,
         },
         options
       )
@@ -235,7 +236,6 @@ class PixivApi {
         {
           word,
           search_target: 'partial_match_for_tags',
-          filter,
         },
         options
       )
@@ -254,7 +254,6 @@ class PixivApi {
           word,
           search_target: 'partial_match_for_tags',
           sort: 'date_desc',
-          filter,
         },
         options
       )
@@ -272,7 +271,6 @@ class PixivApi {
         {
           word,
           search_target: 'partial_match_for_tags',
-          filter,
         },
         options
       )
@@ -289,7 +287,6 @@ class PixivApi {
         {
           word,
           search_target: 'partial_match_for_tags',
-          filter,
         },
         options
       )
@@ -306,7 +303,6 @@ class PixivApi {
         {
           word,
           search_target: 'partial_match_for_tags',
-          filter,
         },
         options
       )
@@ -321,7 +317,6 @@ class PixivApi {
     const queryString = qs.stringify(
       Object.assign({
         word,
-        filter,
       })
     );
     return this.requestUrl(`/v1/search/user?${queryString}`);
@@ -360,7 +355,6 @@ class PixivApi {
       Object.assign(
         {
           user_id: id,
-          filter,
         },
         options
       )
@@ -377,7 +371,6 @@ class PixivApi {
       Object.assign(
         {
           user_id: id,
-          filter,
         },
         options
       )
@@ -394,7 +387,6 @@ class PixivApi {
       Object.assign(
         {
           user_id: id,
-          filter,
         },
         options
       )
@@ -423,7 +415,6 @@ class PixivApi {
         {
           user_id: id,
           restrict: 'public',
-          filter,
         },
         options
       )
@@ -474,7 +465,6 @@ class PixivApi {
         {
           user_id: id,
           restrict: 'public',
-          filter,
         },
         options
       )
@@ -548,7 +538,6 @@ class PixivApi {
       Object.assign(
         {
           illust_id: id,
-          filter,
         },
         options
       )
@@ -565,7 +554,6 @@ class PixivApi {
       Object.assign(
         {
           illust_id: id,
-          filter,
         },
         options
       )
@@ -578,7 +566,6 @@ class PixivApi {
       Object.assign(
         {
           content_type: 'illust',
-          filter,
         },
         options
       )
@@ -603,7 +590,6 @@ class PixivApi {
       Object.assign(
         {
           include_ranking_illusts: true,
-          filter,
         },
         options
       )
@@ -616,7 +602,6 @@ class PixivApi {
       Object.assign(
         {
           mode: 'day',
-          filter,
         },
         options
       )
@@ -673,26 +658,12 @@ class PixivApi {
   }
 
   trendingTagsIllust(options) {
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          filter,
-        },
-        options
-      )
-    );
+    const queryString = qs.stringify(Object.assign({}, options));
     return this.requestUrl(`/v1/trending-tags/illust?${queryString}`);
   }
 
   trendingTagsNovel(options) {
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          filter,
-        },
-        options
-      )
-    );
+    const queryString = qs.stringify(Object.assign({}, options));
     return this.requestUrl(`/v1/trending-tags/novel?${queryString}`);
   }
 
@@ -825,7 +796,6 @@ class PixivApi {
       Object.assign(
         {
           include_ranking_label: true,
-          filter,
         },
         options
       )
@@ -838,7 +808,6 @@ class PixivApi {
       Object.assign(
         {
           content_type: 'manga',
-          filter,
         },
         options
       )
@@ -851,7 +820,6 @@ class PixivApi {
       Object.assign(
         {
           include_ranking_novels: true,
-          filter,
         },
         options
       )
@@ -977,14 +945,7 @@ class PixivApi {
   }
 
   userRecommended(options) {
-    const queryString = qs.stringify(
-      Object.assign(
-        {
-          filter,
-        },
-        options
-      )
-    );
+    const queryString = qs.stringify(Object.assign({}, options));
     return this.requestUrl(`/v1/user/recommended?${queryString}`);
   }
 
@@ -1020,7 +981,6 @@ class PixivApi {
       Object.assign(
         {
           user_id: id,
-          filter,
         },
         options
       )
